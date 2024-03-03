@@ -1,4 +1,31 @@
 #!/usr/bin/bash
+
+[[ "${1,,}" != +(\-)@(h)?(elp) ]] || { cat <<'EOL'
+NAME:
+   wcm - omni-directional character counter
+
+USAGE:
+   [<input ...> | ] wcm  [<input...>]
+
+SYNOPSIS:
+   Wrapper for `wc -m` providing the following enhancements:
+    * All inputs - whether piped, or passed - are counted.
+    * Any combination of inputs is permitted, and everything is considered a string.
+    * A single sum total of all counted characters is returned.
+    * IFS and quotation are respectfully ignored, thus rendering the output
+      reliably accurate enough to use in mathmatical operations where it is desireable
+      for answers to map to reality. If for whatever reason you prefer to count
+      the space between the end of a line and the begining of the next as a character,
+      then you don't need us.  Just use `wc -m`
+
+OPTIONAL PARAMETERS:
+   -h,          : Show this helpful usage information.
+    --help
+
+EOL
+	exit 0
+}
+
 declare -i m=0
 [ -t 0 ] || { while read line ; do (( m += $(($(echo "$line" | wc -m) - 1)) )); done < <(cat - ); }
 for((a=1;a<=$#;a++)){ (( m += $(($(echo "${!a}" | wc -m) - 1)) )); }
