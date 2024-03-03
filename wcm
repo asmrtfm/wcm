@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+declare -i m=0
+[ -t 0 ] || { while read line ; do (( m += $(($(echo "$line" | wc -m) - 1)) )); done < <(cat - ); }
+for((a=1;a<=$#;a++)){ (( m += $(($(echo "${!a}" | wc -m) - 1)) )); }
+printf '%i\n' "$m"
